@@ -4,7 +4,12 @@ Chào mừng đến với **Agentic Software Team v1.0** — một đội ngũ p
 
 ## Cách hoạt động
 
-Hệ thống này bao gồm **7 agent** với vai trò chuyên biệt và **24+ slash command** bao phủ toàn bộ vòng đời phát triển phần mềm. Tất cả chỉ là các file markdown — không cần infrastructure, không cần deployment.
+Hệ thống này bao gồm **7 agent** với vai trò chuyên biệt và **24+ slash command** bao phủ toàn bộ vòng đời phát triển phần mềm.
+
+Kiến trúc đã được tách lớp:
+- `.github-copilot/` = workflow knowledge (persona/command/template/artifacts)
+- `.github/` = native chat customizations (agents/instructions/prompts/skills/hooks)
+- `.vscode/` = runtime integrations (MCP, plugin recommendations, workspace settings)
 
 ## Đội ngũ Agent
 
@@ -34,7 +39,7 @@ Hệ thống này bao gồm **7 agent** với vai trò chuyên biệt và **24+ 
 /release v1.0.0                   → Release lên main
 ```
 
-## Cấu trúc Workspace
+## Cấu trúc Workflow Knowledge
 
 ```
 .github-copilot/
@@ -51,6 +56,24 @@ Hệ thống này bao gồm **7 agent** với vai trò chuyên biệt và **24+ 
     ├── bugs/                ← BUG-xxxxx.md
     ├── analysis/            ← Brownfield analysis docs
     └── reviews/             ← PR review reports
+```
+
+## Cấu trúc Runtime Customizations
+
+```text
+.github/
+├── copilot-instructions.md
+├── AGENTS.md
+├── agents/*.agent.md
+├── instructions/*.instructions.md
+├── prompts/*.prompt.md
+├── skills/*/SKILL.md
+└── hooks/*.json
+
+.vscode/
+├── settings.json
+├── mcp.json
+└── extensions.json
 ```
 
 ## Quy tắc Nhánh Git (Branch Rules)
@@ -81,7 +104,7 @@ Hệ thống này bao gồm **7 agent** với vai trò chuyên biệt và **24+ 
 /discover-codebase
 
 # Xem hướng dẫn đầy đủ
-# Đọc file USAGE-GUIDE.md tại thư mục gốc
+# Đọc file .github-copilot/USAGE-GUIDE.md
 ```
 
 ## Cách sử dụng với GitHub Copilot
@@ -89,7 +112,9 @@ Hệ thống này bao gồm **7 agent** với vai trò chuyên biệt và **24+ 
 ### Trong VS Code với GitHub Copilot Chat:
 1. Mở Copilot Chat (Ctrl+Shift+I hoặc Cmd+Shift+I)
 2. Sử dụng `@workspace` để chat với context của project
-3. Gọi các lệnh bằng cách yêu cầu Copilot thực hiện workflow
+3. Chọn custom agent trong `.github/agents/*.agent.md` khi cần role cụ thể
+4. Gõ `/` để chạy prompt/skill trong `.github/prompts` và `.github/skills`
+5. Runtime policy được enforce qua `.github/hooks` và `.vscode/settings.json`
 
 ### Ví dụ:
 ```

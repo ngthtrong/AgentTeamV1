@@ -1,617 +1,294 @@
-# Hướng Dẫn Sử Dụng Agentic Software Team với GitHub Copilot
+# Huong Dan Su Dung Agentic Software Team voi GitHub Copilot
 
-> Hướng dẫn đầy đủ để vận hành đội ngũ phát triển phần mềm AI trên GitHub Copilot Chat
-
----
-
-## 📋 Mục Lục
-
-1. [Giới thiệu](#-giới-thiệu)
-2. [Cài đặt và Thiết lập](#-cài-đặt-và-thiết-lập)
-3. [Đội ngũ Agent](#-đội-ngũ-agent)
-4. [Quy trình Làm việc Chuẩn](#-quy-trình-làm-việc-chuẩn)
-5. [Danh sách Slash Commands](#-danh-sách-slash-commands)
-6. [Các Điểm Kiểm soát (Human Checkpoints)](#-các-điểm-kiểm-soát-human-checkpoints)
-7. [Ví dụ Thực tế](#-ví-dụ-thực-tế)
-8. [Troubleshooting](#-troubleshooting)
-9. [Best Practices](#-best-practices)
+> Phien ban da tinh chinh de tan dung native chat customizations: agents, instructions, prompts, skills, hooks, MCP servers, va VS Code plugins.
 
 ---
 
-## 🎯 Giới thiệu
+## Muc Luc
 
-**Agentic Software Team** là hệ thống multi-agent giúp tự động hóa quy trình phát triển phần mềm với kỷ luật cao:
-
-- **7 Agent** chuyên biệt với vai trò rõ ràng
-- **24+ Slash Commands** bao phủ toàn bộ vòng đời phát triển
-- **TDD-first** — test trước, code sau
-- **Git Discipline** — không ai commit trực tiếp lên `main`
-- **Human-in-the-loop** — 7 điểm kiểm soát bắt buộc
-
-### Triết lý
-
-> **AI thực thi kỷ luật, con người giữ quyền phán đoán.**
-
-Hệ thống không thay thế developers, mà giúp họ tuân thủ best practices một cách tự động.
+1. [Tong quan](#tong-quan)
+2. [Kien truc 3 lop](#kien-truc-3-lop)
+3. [Config dat o dau](#config-dat-o-dau)
+4. [Cai dat nhanh](#cai-dat-nhanh)
+5. [Doi ngu Agent](#doi-ngu-agent)
+6. [Quy trinh chuan](#quy-trinh-chuan)
+7. [Prompt va Skill](#prompt-va-skill)
+8. [Hooks va Runtime Guardrails](#hooks-va-runtime-guardrails)
+9. [MCP Servers va Plugins](#mcp-servers-va-plugins)
+10. [Human Checkpoints](#human-checkpoints)
+11. [Troubleshooting](#troubleshooting)
+12. [Best Practices](#best-practices)
 
 ---
 
-## 🔧 Cài đặt và Thiết lập
+## Tong quan
 
-### Yêu cầu
+**Agentic Software Team** duoc chia ro 2 loai tri thuc:
 
-- VS Code với GitHub Copilot extension
-- Git repository đã khởi tạo
-- Copilot Chat enabled
+- **Workflow knowledge**: nam trong `.github-copilot/` (persona, command, template, artifacts)
+- **Runtime customization**: nam trong `.github/` va `.vscode/` (agents, instructions, prompts, skills, hooks, MCP, plugin settings)
 
-### Bước 1: Copy thư mục `.github-copilot`
+Triet ly van giu nguyen:
 
-Nếu bạn đang đọc file này, nghĩa là thư mục đã có sẵn!
+> AI thuc thi ky luat, con nguoi giu quyen phan doan.
 
-### Bước 2: Mở Copilot Chat
+---
 
-Trong VS Code:
-- **Windows/Linux**: `Ctrl + Shift + I`
-- **macOS**: `Cmd + Shift + I`
+## Kien truc 3 lop
 
-### Bước 3: Sử dụng `@workspace`
+```text
+Lop 1 - Workflow/Knowledge (Source of truth)
+.github-copilot/
+  agents/
+  commands/
+  templates/
+  workspace/
+  PROJECT-PROFILE.md
 
-Để Copilot đọc được các file agent và command, luôn bắt đầu với:
+Lop 2 - Copilot Chat Customizations (Native)
+.github/
+  copilot-instructions.md
+  AGENTS.md
+  agents/*.agent.md
+  instructions/*.instructions.md
+  prompts/*.prompt.md
+  skills/*/SKILL.md
+  hooks/*.json
 
-```
-@workspace Hãy đọc .github-copilot/copilot-instructions.md và thực hiện ...
-```
-
-### Bước 4: Chạy Setup (cho dự án mới)
-
-```
-@workspace Hãy thực hiện /setup-project theo hướng dẫn trong .github-copilot/commands/setup-project.md
+Lop 3 - IDE Runtime Integration
+.vscode/
+  settings.json
+  mcp.json
+  extensions.json
 ```
 
 ---
 
-## 👥 Đội ngũ Agent
+## Config dat o dau
 
-### 1. Agent BA (Business Analyst)
+| Nhom config | Vi tri khuyen nghi | Muc dich |
+|-------------|--------------------|----------|
+| Persona va workflow command | `.github-copilot/agents`, `.github-copilot/commands` | Nguon su that de thuc thi quy trinh |
+| Always-on project instruction | `.github/copilot-instructions.md` | Rule runtime chung cho Copilot Chat |
+| Agent modes (chat custom agents) | `.github/agents/*.agent.md` | Chon role nhanh trong Chat |
+| File-scoped guidance | `.github/instructions/*.instructions.md` | Rule theo file pattern (`applyTo`) |
+| Slash prompts tai su dung | `.github/prompts/*.prompt.md` | Mau prompt chay nhanh qua `/` |
+| Workflow skill da dong goi | `.github/skills/*/SKILL.md` | Tac vu lap lai, co quy trinh ro |
+| Runtime policy hooks | `.github/hooks/*.json` + scripts | Chan hanh vi rui ro o cap tool |
+| MCP server definitions | `.vscode/mcp.json` | Ket noi cong cu/nguon du lieu ben ngoai |
+| Plugin recommendations | `.vscode/extensions.json` | Dong bo moi truong lam viec cho team |
+| Workspace-level chat settings | `.vscode/settings.json` | Bat/tat tinh nang chat theo du an |
 
-**File:** `agents/ba.md`
-
-**Vai trò:**
-- Đọc product brief và phân tích yêu cầu
-- Viết spec với acceptance criteria dạng Given/When/Then
-- Đánh dấu các điểm mơ hồ cần PO làm rõ
-
-**Kích hoạt:**
-```
-@workspace Hãy đóng vai Agent BA (đọc agents/ba.md) và thực hiện /analyze-requirements BRIEF-00001
-```
-
----
-
-### 2. Agent PM (Project Manager)
-
-**File:** `agents/pm.md`
-
-**Vai trò:**
-- Phân rã spec thành chuỗi task TDD
-- Quản lý sprint planning
-- Commit planning artifacts vào git
-
-**Kích hoạt:**
-```
-@workspace Hãy đóng vai Agent PM (đọc agents/pm.md) và thực hiện /plan-sprint
-```
+**Luu y quan trong**:
+- Khong dat custom agent/prompt/instruction/hook vao `.github-copilot/`.
+- `.github-copilot/` la noi luu workflow docs, KHONG phai runtime config directory cua Copilot Chat.
 
 ---
 
-### 3. Agent Developer
+## Cai dat nhanh
 
-**File:** `agents/developer.md`
+### 1. Kiem tra cac thu muc can thiet
 
-**Vai trò:**
-- Viết failing unit tests (TDD Red Phase)
-- Implement features (TDD Green Phase)
-- Chạy coverage gate và performance scan
+- `.github-copilot/` da co du `agents/commands/templates/workspace`
+- `.github/` da co `copilot-instructions`, `agents`, `instructions`, `prompts`, `skills`, `hooks`
+- `.vscode/` da co `settings.json`, `mcp.json`, `extensions.json`
 
-**Kích hoạt:**
+### 2. Cai extension khuyen nghi
+
+Mo VS Code -> Extensions -> cai theo `.vscode/extensions.json`:
+- GitHub Copilot
+- GitHub Copilot Chat
+- GitHub Pull Requests and Issues
+- GitLens
+- PowerShell
+
+### 3. Bat instruction files va prompt files
+
+Dam bao workspace dang dung `.vscode/settings.json` va extension Copilot Chat da active.
+
+### 4. Khoi dong voi orchestrator
+
+Trong Chat:
+
+```text
+@workspace Su dung agent-orchestrator va thuc hien /setup-project
 ```
-@workspace Hãy đóng vai Agent Developer (đọc agents/developer.md) và thực hiện /implement-task TASK-00002
-```
+
+Hoac go `/` de chon prompt da dinh nghia (Analyze Requirements, Plan Sprint, Implement Task, ...).
 
 ---
 
-### 4. Agent Tech Lead
+## Doi ngu Agent
 
-**File:** `agents/techlead.md`
+### Nguon persona
 
-**Vai trò:**
-- Review Pull Requests với checklist nghiêm ngặt
-- Viết Architecture Decision Records (ADR)
-- Đảm bảo code quality và NFR compliance
+- Persona goc: `.github-copilot/agents/*.md`
+- Chat custom agents: `.github/agents/*.agent.md`
 
-**Kích hoạt:**
-```
-@workspace Hãy đóng vai Agent Tech Lead (đọc agents/techlead.md) và thực hiện /techlead-review TASK-00002
-```
+### Mapping role
 
----
-
-### 5. Agent Tester
-
-**File:** `agents/tester.md`
-
-**Vai trò:**
-- Viết và chạy E2E tests
-- Thực hiện smoke test trên môi trường live
-- Tạo báo cáo cho PO ký duyệt
-
-**Kích hoạt:**
-```
-@workspace Hãy đóng vai Agent Tester (đọc agents/tester.md) và thực hiện /smoke-test v1.0.0
-```
+| Role | Custom agent | Persona goc |
+|------|--------------|-------------|
+| BA | `agent-ba` | `.github-copilot/agents/ba.md` |
+| PM | `agent-pm` | `.github-copilot/agents/pm.md` |
+| Developer | `agent-developer` | `.github-copilot/agents/developer.md` |
+| Tech Lead | `agent-techlead` | `.github-copilot/agents/techlead.md` |
+| Tester | `agent-tester` | `.github-copilot/agents/tester.md` |
+| Analyst | `agent-analyst` | `.github-copilot/agents/analyst.md` |
+| Doc Sync | `agent-docsync` | `.github-copilot/agents/docsync.md` |
+| Orchestrator | `agent-orchestrator` | `.github/AGENTS.md` + command routing |
 
 ---
 
-### 6. Agent Codebase Analyst
+## Quy trinh chuan
 
-**File:** `agents/analyst.md`
+```text
+1) Setup va discovery
+   /setup-project -> /detect-stack -> /discover-codebase -> /update-agents
 
-**Vai trò:**
-- Khám phá và ghi chép hệ thống hiện có (brownfield discovery)
-- Phát hiện fragile zones và tech debt
-- Tạo tài liệu phân tích "sống"
+2) Requirements
+   Tao BRIEF -> /analyze-requirements -> PO doi ten DRAFT-REQ -> REQ
 
-**Kích hoạt:**
+3) Planning
+   /plan-sprint -> commit planning artifacts vao develop
+
+4) Development loop
+   /write-unit-tests -> /implement-task -> /run-tests -> /check-coverage
+   -> /create-pr -> /techlead-review -> /merge-pr
+
+5) Release
+   /smoke-test -> PO sign-off -> /release (xac nhan YES)
 ```
-@workspace Hãy đóng vai Agent Analyst (đọc agents/analyst.md) và thực hiện /discover-codebase
-```
+
+### Rule branch bat buoc
+
+- Khong push truc tiep len `main`/`develop`
+- Feature tren `feature/TASK-xxxxx-*`
+- Bug fix tren `fix/BUG-xxxxx-*`
 
 ---
 
-### 7. Agent Doc Sync
+## Prompt va Skill
 
-**File:** `agents/docsync.md`
+### Prompt files (`.github/prompts/*.prompt.md`)
 
-**Vai trò:**
-- Phát hiện drift giữa tài liệu và code
-- Cập nhật tài liệu sau mỗi sprint/PR
-- Cảnh báo khi tài liệu bị stale
+Duoc goi nhanh qua `/` trong Chat:
+- Analyze Requirements
+- Plan Sprint
+- Implement Task
+- Tech Lead Review
+- Smoke Test
+- Release
 
-**Kích hoạt:**
-```
-@workspace Hãy đóng vai Agent Doc Sync (đọc agents/docsync.md) và thực hiện /doc-sync
-```
+### Skills (`.github/skills/*/SKILL.md`)
 
----
+- `agentic-sprint`: dieu phoi sprint end-to-end
+- `agentic-brownfield`: brownfield discovery + drift detection
 
-## 🔄 Quy trình Làm việc Chuẩn
-
-### Sprint Flow Hoàn Chỉnh
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    SPRINT WORKFLOW                          │
-├─────────────────────────────────────────────────────────────┤
-│                                                             │
-│  1. SETUP (một lần)                                         │
-│     /setup-project → /detect-stack → /discover-codebase     │
-│                                                             │
-│  2. REQUIREMENTS                                            │
-│     Tạo BRIEF-*.md → /analyze-requirements                  │
-│     → PO phê duyệt (đổi tên DRAFT-REQ → REQ)               │
-│                                                             │
-│  3. PLANNING                                                │
-│     /plan-sprint → Tasks được tạo và commit                 │
-│                                                             │
-│  4. DEVELOPMENT (lặp cho mỗi feature)                       │
-│     /write-unit-tests TASK-N                                │
-│     → /implement-task TASK-N+1                              │
-│     → /run-tests TASK-N+2                                   │
-│     → /check-coverage TASK-N+1                              │
-│     → /create-pr TASK-N+1                                   │
-│     → /techlead-review TASK-N+1                             │
-│     → /merge-pr TASK-N+1                                    │
-│                                                             │
-│  5. RELEASE                                                 │
-│     /smoke-test v1.0.0 → PO ký duyệt                       │
-│     → /release v1.0.0 → Gõ YES                              │
-│                                                             │
-└─────────────────────────────────────────────────────────────┘
-```
-
-### Chi tiết từng Phase
-
-#### Phase 1: Setup (Một lần cho dự án mới)
-
-```bash
-# 1. Khởi tạo hệ thống
-@workspace Hãy thực hiện /setup-project
-
-# 2. Phát hiện công nghệ
-@workspace Hãy thực hiện /detect-stack
-# → Review STACK.md và PROJECT-PROFILE.md
-
-# 3. Khám phá codebase (cho dự án có sẵn)
-@workspace Hãy thực hiện /discover-codebase
-
-# 4. Cập nhật agent với commands cụ thể
-@workspace Hãy thực hiện /update-agents
-```
-
-#### Phase 2: Requirements
-
-```bash
-# 1. Tạo brief
-# → Tạo file .github-copilot/workspace/requirements/input/BRIEF-00001.md
-
-# 2. BA phân tích
-@workspace Hãy thực hiện /analyze-requirements BRIEF-00001
-# → DRAFT-REQ-00001.md được tạo
-
-# 3. PO review và phê duyệt
-# → Đổi tên DRAFT-REQ-00001.md thành REQ-00001.md
-```
-
-#### Phase 3: Planning
-
-```bash
-@workspace Hãy thực hiện /plan-sprint
-# → Tasks được tạo:
-#    TASK-00001 (unit-test)
-#    TASK-00002 (implementation)
-#    TASK-00003 (e2e-test)
-```
-
-#### Phase 4: Development
-
-```bash
-# TDD Red Phase
-@workspace Hãy thực hiện /write-unit-tests TASK-00001
-# → Tests fail (expected)
-
-# TDD Green Phase
-@workspace Hãy thực hiện /implement-task TASK-00002
-# → Tests pass, coverage ≥ 80%
-
-# E2E Testing
-@workspace Hãy thực hiện /run-tests TASK-00003
-
-# Create PR
-@workspace Hãy thực hiện /create-pr TASK-00002
-
-# Tech Lead Review
-@workspace Hãy thực hiện /techlead-review TASK-00002
-
-# Merge (sau khi approved)
-@workspace Hãy thực hiện /merge-pr TASK-00002
-```
-
-#### Phase 5: Release
-
-```bash
-# Smoke Test
-@workspace Hãy thực hiện /smoke-test v1.0.0
-# → PO ký duyệt trong báo cáo
-
-# Release
-@workspace Hãy thực hiện /release v1.0.0
-# → Gõ YES để xác nhận
-```
+Khi task lap lai, uu tien skill thay vi viet prompt tu do moi lan.
 
 ---
 
-## 📝 Danh sách Slash Commands
+## Hooks va Runtime Guardrails
 
-### Setup & Discovery
+### Hook files
 
-| Command | Mô tả | Agent |
-|---------|-------|-------|
-| `/setup-project` | Khởi tạo hệ thống cho dự án mới | All |
-| `/detect-stack` | Phát hiện công nghệ dự án | Analyst |
-| `/discover-codebase` | Phân tích brownfield 10 giai đoạn | Analyst |
-| `/update-agents` | Cập nhật guardrails với project commands | Tech Lead |
+- Config: `.github/hooks/policy.json`
+- Scripts: `.github/hooks/scripts/*.ps1`
 
-### Requirements & Planning
+### Muc tieu
 
-| Command | Mô tả | Agent |
-|---------|-------|-------|
-| `/analyze-requirements BRIEF-ID` | Phân tích brief, tạo spec | BA |
-| `/plan-sprint` | Tạo chuỗi task TDD từ specs | PM |
-| `/scan-untracked` | Kiểm tra untracked files trước commit | PM |
+- Inject system message ngay SessionStart
+- Chan command rui ro cao truoc khi tool chay (PreToolUse)
 
-### Development
+### Cac command dang bi chan (mac dinh)
 
-| Command | Mô tả | Agent |
-|---------|-------|-------|
-| `/write-unit-tests TASK-ID` | Viết failing tests (TDD Red) | Developer |
-| `/implement-task TASK-ID` | Implement feature (TDD Green) | Developer |
-| `/check-coverage TASK-ID` | Kiểm tra test coverage | Developer |
+- `git reset --hard`
+- `git checkout --`
+- `git clean -fd`
+- `git push origin main`
+- `git push origin develop`
 
-### Testing
-
-| Command | Mô tả | Agent |
-|---------|-------|-------|
-| `/run-tests TASK-ID` | Viết và chạy E2E tests | Tester |
-| `/smoke-test VERSION` | Chạy smoke test trên live env | Tester |
-
-### Review & Merge
-
-| Command | Mô tả | Agent |
-|---------|-------|-------|
-| `/create-pr TASK-ID` | Tạo Pull Request | Developer |
-| `/techlead-review TASK-ID` | Review PR với checklist | Tech Lead |
-| `/merge-pr TASK-ID` | Squash merge vào develop | PM/Tech Lead |
-
-### Release
-
-| Command | Mô tả | Agent |
-|---------|-------|-------|
-| `/release VERSION` | Merge develop → main, tag | PM |
-
-### Bug Management
-
-| Command | Mô tả | Agent |
-|---------|-------|-------|
-| `/report-bug "description"` | Tạo bug report | Tester |
-| `/triage-bug BUG-ID` | Đánh giá và phân loại bug | PM + Tech Lead |
-| `/verify-fix BUG-ID` | Xác nhận bug đã được fix | Tester |
-| `/bug-status` | Dashboard trạng thái bugs | PM |
-
-### Branch & Docs
-
-| Command | Mô tả | Agent |
-|---------|-------|-------|
-| `/branch-status` | Hiển thị trạng thái branches | PM |
-| `/cleanup-branches` | Xóa branches đã merge | Developer |
-| `/doc-sync` | Đồng bộ tài liệu với code | Doc Sync |
-| `/dashboard` | Sprint dashboard tổng quan | PM |
+Ban co the tuy chinh them pattern theo quy dinh team.
 
 ---
 
-## 🚦 Các Điểm Kiểm soát (Human Checkpoints)
+## MCP Servers va Plugins
 
-### 7 điểm bắt buộc cần con người can thiệp:
+### MCP config
 
-| # | Checkpoint | Khi nào | Ai quyết định |
-|---|------------|---------|---------------|
-| 1 | **Stack Review** | Sau `/detect-stack` | Tech Lead / PO |
-| 2 | **Spec Approval** | Sau `/analyze-requirements` | PO |
-| 3 | **Untracked Files** | Trước planning commits | PO |
-| 4 | **ADR Review** | Khi có quyết định kiến trúc | Tech Lead / Team |
-| 5 | **Bug P1 Triage** | Khi phát hiện bug critical | PM + PO |
-| 6 | **Smoke Test Sign-off** | Sau `/smoke-test` | PO |
-| 7 | **Release Confirmation** | Trước `/release` | PO + gõ YES |
+File `.vscode/mcp.json` dang co sample servers:
+- `filesystem`
+- `github`
+- `sequential-thinking`
 
-### Cách phê duyệt
+**Luu y**:
+- Server `github` can token (`GITHUB_PERSONAL_ACCESS_TOKEN`)
+- Neu chua can dung MCP nao, co the xoa/tat server do trong `mcp.json`
 
-**Spec Approval:**
-```bash
-# Đổi tên file
-mv DRAFT-REQ-00001.md REQ-00001.md
-git add . && git commit -m "approve: REQ-00001"
-```
+### Plugin recommendations
 
-**Smoke Test Sign-off:**
-```markdown
-# Trong file smoke-{version}-{date}.md
-[x] APPROVED — cho phép chạy /release
-Chữ ký: Nguyễn Văn A    Ngày: 2024-03-27
-```
-
-**Release Confirmation:**
-```
-> Gõ 'YES' để xác nhận release:
-YES
-```
+File `.vscode/extensions.json` giup team cai cung bo extension de tranh lech moi truong.
 
 ---
 
-## 🎬 Ví dụ Thực tế
+## Human Checkpoints
 
-### Scenario: Thêm tính năng User Authentication
+7 diem khong duoc bo qua:
 
-#### Bước 1: Tạo Brief
-
-Tạo file `.github-copilot/workspace/requirements/input/BRIEF-00001.md`:
-
-```markdown
-# BRIEF-00001: User Authentication
-
-## Mục tiêu
-Người dùng có thể đăng ký, đăng nhập, và đăng xuất.
-
-## User Stories
-- Với tư cách user, tôi muốn đăng ký tài khoản mới
-- Với tư cách user, tôi muốn đăng nhập với email/password
-- Với tư cách user, tôi muốn đăng xuất
-
-## Ràng buộc
-- Password phải >= 8 ký tự
-- Email phải unique
-- JWT token cho authentication
-```
-
-#### Bước 2: BA Phân tích
-
-```
-@workspace Hãy đóng vai Agent BA và thực hiện /analyze-requirements BRIEF-00001
-
-Đọc file agents/ba.md để hiểu role.
-Đọc file commands/analyze-requirements.md để hiểu workflow.
-```
-
-**Output:** `DRAFT-REQ-00001.md` với Given/When/Then
-
-#### Bước 3: PO Phê duyệt
-
-```bash
-# Review file và trả lời Open Questions
-# Sau đó:
-mv DRAFT-REQ-00001.md REQ-00001.md
-```
-
-#### Bước 4: PM Plan Sprint
-
-```
-@workspace Hãy đóng vai Agent PM và thực hiện /plan-sprint
-```
-
-**Output:**
-- TASK-00001.yaml (unit-test)
-- TASK-00002.yaml (implementation)
-- TASK-00003.yaml (e2e-test)
-- SPRINT-2024-03-27.md
-
-#### Bước 5: Developer Implement
-
-```
-@workspace Hãy thực hiện /write-unit-tests TASK-00001
-
-@workspace Hãy thực hiện /implement-task TASK-00002
-
-@workspace Hãy thực hiện /create-pr TASK-00002
-```
-
-#### Bước 6: Tech Lead Review
-
-```
-@workspace Hãy thực hiện /techlead-review TASK-00002
-```
-
-#### Bước 7: Merge và Release
-
-```
-@workspace Hãy thực hiện /merge-pr TASK-00002
-
-@workspace Hãy thực hiện /smoke-test v1.0.0
-
-# PO ký duyệt trong báo cáo
-
-@workspace Hãy thực hiện /release v1.0.0
-# → Gõ YES
-```
+1. Stack review sau `/detect-stack`
+2. Spec approval (DRAFT-REQ -> REQ)
+3. Untracked files truoc planning commit
+4. ADR review truoc architectural change
+5. Bug P1 triage
+6. Smoke test sign-off
+7. Release confirmation (`YES`)
 
 ---
 
-## 🔧 Troubleshooting
+## Troubleshooting
 
-### Copilot không hiểu context
+### Khong thay custom agents trong chat
 
-**Vấn đề:** Copilot không đọc được các file agent/command
+- Kiem tra file `.github/agents/*.agent.md` co frontmatter hop le
+- Kiem tra extension GitHub Copilot Chat da bat
+- Reload window trong VS Code
 
-**Giải pháp:** Luôn sử dụng `@workspace` và chỉ rõ path:
-```
-@workspace Hãy đọc file .github-copilot/agents/developer.md và thực hiện theo quy trình trong .github-copilot/commands/implement-task.md cho TASK-00002
-```
+### Prompt/Skill khong hien khi go `/`
 
-### Task không tồn tại trong git
+- Kiem tra ten file dung duoi `.prompt.md` hoac `SKILL.md`
+- Kiem tra `description` co du ro rang trigger phrase
+- Kiem tra `name` trong SKILL trung voi ten folder
 
-**Vấn đề:** `/implement-task` báo lỗi task chưa có trong git
+### Instruction khong duoc ap dung
 
-**Giải pháp:**
-```bash
-# Kiểm tra task đã commit chưa
-git log --oneline | grep "TASK-00002"
+- Kiem tra `applyTo` pattern co match file dang sua
+- Kiem tra setting instruction files da bat trong `.vscode/settings.json`
 
-# Nếu chưa, chạy lại /plan-sprint
-```
+### Hook khong chay
 
-### Coverage dưới 80%
+- Kiem tra JSON syntax trong `.github/hooks/policy.json`
+- Kiem tra script path ton tai va co the thuc thi bang `pwsh`
 
-**Vấn đề:** Coverage gate fail
+### MCP server khong ket noi
 
-**Giải pháp:**
-1. Thêm tests cho uncovered lines
-2. Hoặc ghi Tech Debt note với lý do cụ thể:
-```markdown
-# TECH-DEBT.md
-## TD-001: Coverage thấp cho {module}
-- **Lý do**: Legacy code khó test
-- **Plan**: Refactor trong sprint sau
-```
-
-### Conflict khi merge
-
-**Vấn đề:** PR có conflict với develop
-
-**Giải pháp:**
-```bash
-git checkout feature/TASK-00002-auth
-git fetch origin
-git merge origin/develop
-# Resolve conflicts
-git commit
-git push
-```
-
-### Smoke test fail
-
-**Vấn đề:** Scenarios fail trên live environment
-
-**Giải pháp:**
-1. Đọc error logs trong báo cáo
-2. Fix và push lên develop
-3. Chạy lại `/smoke-test`
+- Kiem tra da cai runtime can thiet (`node`, `npx`)
+- Kiem tra env vars va token
+- Thu chay command server thu cong trong terminal de debug
 
 ---
 
-## 💡 Best Practices
+## Best Practices
 
-### 1. Luôn đọc file agent trước khi gọi
-
-```
-@workspace Hãy đọc .github-copilot/agents/developer.md trước, sau đó thực hiện ...
-```
-
-### 2. Một command một lần
-
-Không gọi nhiều commands cùng lúc. Chờ output trước khi tiếp tục.
-
-### 3. Review OUTPUT trước khi tiếp tục
-
-Sau mỗi command, đọc kỹ output để biết:
-- Có lỗi gì không?
-- Bước tiếp theo là gì?
-
-### 4. Commit thường xuyên
-
-Mỗi khi có thay đổi quan trọng (spec, task, code), đảm bảo đã commit vào git.
-
-### 5. Đừng skip Human Checkpoints
-
-7 điểm kiểm soát không phải suggestions — đó là **requirements**.
-
-### 6. Dùng Templates
-
-Luôn sử dụng templates trong `.github-copilot/templates/` để đảm bảo consistency.
-
-### 7. Update PROJECT-PROFILE.md
-
-Sau khi setup, đảm bảo PROJECT-PROFILE.md có đầy đủ:
-- Commands (test, coverage, start, stop)
-- Smoke test scenarios
-- Health check URL
+1. Dung `.github-copilot` cho tri thuc workflow, dung `.github` cho chat runtime customization.
+2. Moi role co custom agent rieng, tranh mot agent lam tat ca.
+3. Prompt cho tac vu don, Skill cho workflow lap lai.
+4. Hooks de enforce policy bat buoc; instructions chi de huong dan.
+5. Luon cap nhat `PROJECT-PROFILE.md` sau moi lan thay doi stack/command.
+6. Commit planning artifacts som de tranh mat state giua cac phien chat.
+7. Khong bo qua human checkpoints du deadline gap.
 
 ---
 
-## 📚 Tài liệu tham khảo
-
-- **copilot-instructions.md** — Entry point và tổng quan
-- **PROJECT-PROFILE.md** — Cấu hình project-specific
-- **agents/*.md** — Chi tiết từng agent
-- **commands/*.md** — Chi tiết từng command
-- **templates/*.md** — File mẫu
-
----
-
-## 🆘 Cần hỗ trợ?
-
-1. Đọc kỹ error message
-2. Kiểm tra file agent/command tương ứng
-3. Verify git status và branch
-4. Chạy `/dashboard` để xem tổng quan
-
----
-
-*Agentic Software Team v1.0 — Built for GitHub Copilot*
-*Hệ thống được xây dựng dựa trên nguyên tắc: AI thực thi kỷ luật, con người giữ quyền phán đoán.*
+*Agentic Software Team v1.1 for GitHub Copilot Chat*  
+*Ky luat workflow o `.github-copilot`, runtime customizations o `.github` va `.vscode`.*
