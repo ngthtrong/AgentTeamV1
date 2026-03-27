@@ -7,15 +7,15 @@ user-invocable: true
 # Agentic Sprint Skill
 
 ## When to Use
-- Can mot luong sprint end-to-end tu requirement den release.
-- Can dam bao team follow dung command order va checkpoints.
+- Cần một luồng sprint end-to-end từ requirement đến release.
+- Cần đảm bảo team follow đúng command order và checkpoints.
 
 ## Procedure
-1. Validate input va xac dinh phase hien tai.
-2. Chon command tiep theo trong `.github-copilot/commands/`.
-3. Thuc thi va cap nhat artifact trong `.github-copilot/workspace/`.
-4. Dung lai tai moi human checkpoint de xin phe duyet.
-5. Tong hop ket qua va next action.
+1. Validate input và xác định phase hiện tại.
+2. Chọn command tiếp theo trong `.github-copilot/commands/`.
+3. Thực thi và cập nhật artifact trong `.github-copilot/workspace/`.
+4. Dừng lại tại mỗi human checkpoint để xin phê duyệt.
+5. Tổng hợp kết quả và next action.
 
 ## Required References
 - `.github-copilot/USAGE-GUIDE.md`

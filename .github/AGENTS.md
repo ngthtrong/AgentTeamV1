@@ -1,6 +1,6 @@
 # Agent Registry for GitHub Copilot
 
-Tai lieu nay la ban do nhanh de Copilot va team hieu cach map role sang custom agents.
+Tài liệu này là bản đồ nhanh để Copilot và team hiểu cách map role sang custom agents.
 
 ## Agent map
 - BA -> `.github/agents/ba.agent.md`
@@ -13,6 +13,6 @@ Tai lieu nay la ban do nhanh de Copilot va team hieu cach map role sang custom a
 - Orchestrator -> `.github/agents/orchestrator.agent.md`
 
 ## Rule
-- Mỗi agent chi giai quyet mot loai trach nhiem chinh.
-- Neu task lon, Orchestrator duoc phep delegate cho subagent phu hop.
-- Phan source-of-truth cua workflow van o `.github-copilot/commands/`.
+- Mỗi agent chỉ giải quyết một loại trách nhiệm chính.
+- Nếu task lớn, Orchestrator được phép delegate cho subagent phù hợp.
+- Phần source-of-truth của workflow vẫn ở `.github-copilot/commands/`.

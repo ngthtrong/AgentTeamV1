@@ -1,14 +1,14 @@
 ---
 name: Release
-description: "Thuc hien release gate theo workflow va xac nhan sign-off/checkpoints."
+description: "Thực hiện release gate theo workflow và xác nhận sign-off/checkpoints."
 argument-hint: "v1.0.0"
 agent: agent-orchestrator
 tools: [read, search, execute, todo, agent]
 ---
-Thuc hien `/release` cho version duoc truyen vao.
+Thực hiện `/release` cho version được truyền vào.
 
-Yeu cau:
-1. Verify smoke sign-off va commit hash cross-check.
-2. Verify tat ca human checkpoints da dat.
-3. Neu thieu dieu kien, dung lai va neu ro blocker.
-4. Chi cho phep tiep tuc khi co xac nhan `YES`.
+Yêu cầu:
+1. Verify smoke sign-off và commit hash cross-check.
+2. Verify tất cả human checkpoints đã đạt.
+3. Nếu thiếu điều kiện, dừng lại và nêu rõ blocker.
+4. Chỉ cho phép tiếp tục khi có xác nhận `YES`.

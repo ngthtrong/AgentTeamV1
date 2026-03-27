@@ -3,9 +3,9 @@ description: "Use when running Agentic Software Team workflows, slash commands, 
 ---
 # Agentic Workflow Instructions
 
-- Luon map user request vao command tuong ung trong `.github-copilot/commands/` truoc khi hanh dong.
-- Neu user chi dua TASK-ID/BRIEF-ID, phai xac minh file dau vao ton tai truoc khi tiep tuc.
-- Khong bo qua human checkpoints duoc mo ta trong `copilot-instructions.md`.
-- Khi tao artifact moi, dat dung folder trong `.github-copilot/workspace/`.
-- Khi gap ambiguity trong requirement, danh dau `OPEN QUESTION` thay vi tu dien giai.
-- Khi review, uu tien bug/risk/regression truoc style.
+- Luôn map user request vào command tương ứng trong `.github-copilot/commands/` trước khi hành động.
+- Nếu user chỉ đưa TASK-ID/BRIEF-ID, phải xác minh file đầu vào tồn tại trước khi tiếp tục.
+- Không bỏ qua human checkpoints được mô tả trong `copilot-instructions.md`.
+- Khi tạo artifact mới, đặt đúng folder trong `.github-copilot/workspace/`.
+- Khi gặp ambiguity trong requirement, đánh dấu `OPEN QUESTION` thay vì tự diễn giải.
+- Khi review, ưu tiên bug/risk/regression trước style.

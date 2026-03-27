@@ -4,8 +4,8 @@ applyTo: ".github-copilot/workspace/requirements/**/*.md, .github-copilot/worksp
 ---
 # Requirements and Documentation Instructions
 
-- Dung heading ro rang, theo thu tu tu tong quan den chi tiet.
-- Acceptance criteria phai viet theo Given/When/Then.
-- Tach biet `fact` va `assumption`; assumption phai danh dau ro.
-- Khong chen noi dung ngoai pham vi brief/spec da duoc phe duyet.
-- Bao cao review phai phan loai: BLOCKER, IMPORTANT, SUGGESTION, NOTE.
+- Dùng heading rõ ràng, theo thứ tự từ tổng quan đến chi tiết.
+- Acceptance criteria phải viết theo Given/When/Then.
+- Tách biệt `fact` và `assumption`; assumption phải đánh dấu rõ.
+- Không chèn nội dung ngoài phạm vi brief/spec đã được phê duyệt.
+- Báo cáo review phải phân loại: BLOCKER, IMPORTANT, SUGGESTION, NOTE.

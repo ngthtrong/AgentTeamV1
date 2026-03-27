@@ -1,38 +1,38 @@
 # Agentic Software Team - GitHub Copilot Runtime Instructions
 
-Tai lieu trong `.github-copilot/` la nguon tri thuc va workflow chuan cua team.
-Cac file trong `.github/` la lop chat customization native cho GitHub Copilot Chat.
+Tài liệu trong `.github-copilot/` là nguồn tri thức và workflow chuẩn của team.
+Các file trong `.github/` là lớp chat customization native cho GitHub Copilot Chat.
 
-## Muc tieu
-- Giu ky luat TDD-first, Git discipline, va human checkpoints.
-- Dung dung role (BA/PM/Developer/Tech Lead/Tester/Analyst/Doc Sync) cho dung cong viec.
-- Khong de planning artifact chi ton tai local.
+## Mục tiêu
+- Giữ kỷ luật TDD-first, Git discipline, và human checkpoints.
+- Dùng đúng role (BA/PM/Developer/Tech Lead/Tester/Analyst/Doc Sync) cho đúng công việc.
+- Không để planning artifact chỉ tồn tại local.
 
-## Nguon su that (source of truth)
+## Nguồn sự thật (source of truth)
 1. Persona: `.github-copilot/agents/*.md`
 2. Workflow command: `.github-copilot/commands/*.md`
 3. Template: `.github-copilot/templates/*`
 4. Workspace artifacts: `.github-copilot/workspace/**`
 
-Neu co xung dot giua custom prompt va command docs, uu tien command docs.
+Nếu có xung đột giữa custom prompt và command docs, ưu tiên command docs.
 
-## Quy tac branch bat buoc
-- Khong push truc tiep len `main` hoac `develop`.
-- Development phai tren `feature/TASK-xxxxx-*` hoac `fix/BUG-xxxxx-*`.
-- Planning artifacts can commit vao `develop` theo workflow PM.
+## Quy tắc branch bắt buộc
+- Không push trực tiếp lên `main` hoặc `develop`.
+- Development phải trên `feature/TASK-xxxxx-*` hoặc `fix/BUG-xxxxx-*`.
+- Planning artifacts cần commit vào `develop` theo workflow PM.
 
-## Cach xu ly khi user goi slash command
-Khi user nhac den `/command-name`, phai:
-1. Doc `.github-copilot/commands/command-name.md`
-2. Doc persona lien quan trong `.github-copilot/agents/`
-3. Thuc thi dung thu tu buoc, neu thieu input thi hoi toi thieu
-4. Bao cao ket qua voi duong dan file duoc tao/cap nhat
+## Cách xử lý khi user gọi slash command
+Khi user nhắc đến `/command-name`, phải:
+1. Đọc `.github-copilot/commands/command-name.md`
+2. Đọc persona liên quan trong `.github-copilot/agents/`
+3. Thực thi đúng thứ tự bước, nếu thiếu input thì hỏi tối thiểu
+4. Báo cáo kết quả với đường dẫn file được tạo/cập nhật
 
-## Human checkpoints khong duoc bo qua
+## Human checkpoints không được bỏ qua
 1. Stack review sau `/detect-stack`
 2. Spec approval (DRAFT-REQ -> REQ)
-3. Untracked files truoc planning commit
-4. ADR review truoc code thay doi kien truc
+3. Untracked files trước planning commit
+4. ADR review trước code thay đổi kiến trúc
 5. Bug P1 triage
 6. Smoke test sign-off
 7. Release confirmation (`YES`)

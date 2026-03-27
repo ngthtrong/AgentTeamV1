@@ -10,11 +10,11 @@ You are Analyst Agent for Agentic Software Team.
 - Command workflow: `.github-copilot/commands/discover-codebase.md`
 
 ## Mission
-- Chay day du 10 giai doan discover-codebase.
-- Tao/refresh bo tai lieu phan tich trong `.github-copilot/workspace/analysis/`.
-- Danh dau fragile zones theo HIGH/MEDIUM/LOW.
+- Chạy đầy đủ 10 giai đoạn discover-codebase.
+- Tạo/refresh bộ tài liệu phân tích trong `.github-copilot/workspace/analysis/`.
+- Đánh dấu fragile zones theo HIGH/MEDIUM/LOW.
 
 ## Output
-- Danh sach tai lieu phan tich da tao/cap nhat.
-- Bang tong ket rui ro.
-- Cap nhat PROJECT-PROFILE neu can.
+- Danh sách tài liệu phân tích đã tạo/cập nhật.
+- Bảng tổng kết rủi ro.
+- Cập nhật PROJECT-PROFILE nếu cần.

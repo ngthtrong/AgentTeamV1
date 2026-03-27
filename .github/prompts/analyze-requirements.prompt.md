@@ -1,14 +1,14 @@
 ---
 name: Analyze Requirements
-description: "Phan tich BRIEF theo BA workflow va tao DRAFT-REQ voi Given/When/Then."
+description: "Phân tích BRIEF theo BA workflow và tạo DRAFT-REQ với Given/When/Then."
 argument-hint: "BRIEF-00001"
 agent: agent-ba
 tools: [read, search, edit]
 ---
-Thuc hien `/analyze-requirements` cho BRIEF ID do nguoi dung cung cap.
+Thực hiện `/analyze-requirements` cho BRIEF ID do người dùng cung cấp.
 
-Yeu cau:
-1. Doc `.github-copilot/commands/analyze-requirements.md` va `.github-copilot/agents/ba.md`.
-2. Tao/cap nhat file DRAFT-REQ dung dinh dang.
-3. Liet ke OPEN QUESTIONS can PO tra loi.
-4. Ket thuc bang huong dan phe duyet DRAFT-REQ -> REQ.
+Yêu cầu:
+1. Đọc `.github-copilot/commands/analyze-requirements.md` và `.github-copilot/agents/ba.md`.
+2. Tạo/cập nhật file DRAFT-REQ đúng định dạng.
+3. Liệt kê OPEN QUESTIONS cần PO trả lời.
+4. Kết thúc bằng hướng dẫn phê duyệt DRAFT-REQ -> REQ.

@@ -1,14 +1,14 @@
 ---
 name: Smoke Test
-description: "Chay smoke-test tren live environment va tao report cho PO sign-off."
+description: "Chạy smoke-test trên live environment và tạo report cho PO sign-off."
 argument-hint: "v1.0.0"
 agent: agent-tester
 tools: [read, search, edit, execute]
 ---
-Thuc hien `/smoke-test` cho version duoc truyen vao.
+Thực hiện `/smoke-test` cho version được truyền vào.
 
-Yeu cau:
-1. Doc PROJECT-PROFILE truoc khi chay.
+Yêu cầu:
+1. Đọc PROJECT-PROFILE trước khi chạy.
 2. Record commit hash va cross-check release readiness.
-3. Tao report voi bang ket qua PASS/FAIL.
-4. Nhac PO sign-off truoc release.
+3. Tạo report với bảng kết quả PASS/FAIL.
+4. Nhắc PO sign-off trước release.

@@ -1,40 +1,40 @@
-# Huong Dan Su Dung Agentic Software Team voi GitHub Copilot
+# Hướng Dẫn Sử Dụng Agentic Software Team với GitHub Copilot
 
-> Phien ban da tinh chinh de tan dung native chat customizations: agents, instructions, prompts, skills, hooks, MCP servers, va VS Code plugins.
+> Phiên bản đã tinh chỉnh để tận dụng native chat customizations: agents, instructions, prompts, skills, hooks, MCP servers, và VS Code plugins.
 
 ---
 
-## Muc Luc
+## Mục Lục
 
-1. [Tong quan](#tong-quan)
-2. [Kien truc 3 lop](#kien-truc-3-lop)
-3. [Config dat o dau](#config-dat-o-dau)
-4. [Cai dat nhanh](#cai-dat-nhanh)
-5. [Doi ngu Agent](#doi-ngu-agent)
-6. [Quy trinh chuan](#quy-trinh-chuan)
-7. [Prompt va Skill](#prompt-va-skill)
-8. [Hooks va Runtime Guardrails](#hooks-va-runtime-guardrails)
-9. [MCP Servers va Plugins](#mcp-servers-va-plugins)
+1. [Tổng quan](#tong-quan)
+2. [Kiến trúc 3 lớp](#kien-truc-3-lop)
+3. [Config đặt ở đâu](#config-dat-o-dau)
+4. [Cài đặt nhanh](#cai-dat-nhanh)
+5. [Đội ngũ Agent](#doi-ngu-agent)
+6. [Quy trình chuẩn](#quy-trinh-chuan)
+7. [Prompt và Skill](#prompt-va-skill)
+8. [Hooks và Runtime Guardrails](#hooks-va-runtime-guardrails)
+9. [MCP Servers và Plugins](#mcp-servers-va-plugins)
 10. [Human Checkpoints](#human-checkpoints)
 11. [Troubleshooting](#troubleshooting)
 12. [Best Practices](#best-practices)
 
 ---
 
-## Tong quan
+## Tổng quan
 
-**Agentic Software Team** duoc chia ro 2 loai tri thuc:
+**Agentic Software Team** được chia rõ 2 loại tri thức:
 
-- **Workflow knowledge**: nam trong `.github-copilot/` (persona, command, template, artifacts)
-- **Runtime customization**: nam trong `.github/` va `.vscode/` (agents, instructions, prompts, skills, hooks, MCP, plugin settings)
+- **Workflow knowledge**: nằm trong `.github-copilot/` (persona, command, template, artifacts)
+- **Runtime customization**: nằm trong `.github/` và `.vscode/` (agents, instructions, prompts, skills, hooks, MCP, plugin settings)
 
-Triet ly van giu nguyen:
+Triết lý vẫn giữ nguyên:
 
-> AI thuc thi ky luat, con nguoi giu quyen phan doan.
+> AI thực thi kỷ luật, con người giữ quyền phán đoán.
 
 ---
 
-## Kien truc 3 lop
+## Kiến trúc 3 lớp
 
 ```text
 Lop 1 - Workflow/Knowledge (Source of truth)
@@ -64,70 +64,70 @@ Lop 3 - IDE Runtime Integration
 
 ---
 
-## Config dat o dau
+## Config đặt ở đâu
 
-| Nhom config | Vi tri khuyen nghi | Muc dich |
+| Nhóm config | Vị trí khuyến nghị | Mục đích |
 |-------------|--------------------|----------|
-| Persona va workflow command | `.github-copilot/agents`, `.github-copilot/commands` | Nguon su that de thuc thi quy trinh |
+| Persona và workflow command | `.github-copilot/agents`, `.github-copilot/commands` | Nguồn sự thật để thực thi quy trình |
 | Always-on project instruction | `.github/copilot-instructions.md` | Rule runtime chung cho Copilot Chat |
-| Agent modes (chat custom agents) | `.github/agents/*.agent.md` | Chon role nhanh trong Chat |
+| Agent modes (chat custom agents) | `.github/agents/*.agent.md` | Chọn role nhanh trong Chat |
 | File-scoped guidance | `.github/instructions/*.instructions.md` | Rule theo file pattern (`applyTo`) |
-| Slash prompts tai su dung | `.github/prompts/*.prompt.md` | Mau prompt chay nhanh qua `/` |
-| Workflow skill da dong goi | `.github/skills/*/SKILL.md` | Tac vu lap lai, co quy trinh ro |
-| Runtime policy hooks | `.github/hooks/*.json` + scripts | Chan hanh vi rui ro o cap tool |
-| MCP server definitions | `.vscode/mcp.json` | Ket noi cong cu/nguon du lieu ben ngoai |
-| Plugin recommendations | `.vscode/extensions.json` | Dong bo moi truong lam viec cho team |
-| Workspace-level chat settings | `.vscode/settings.json` | Bat/tat tinh nang chat theo du an |
+| Slash prompts tái sử dụng | `.github/prompts/*.prompt.md` | Mẫu prompt chạy nhanh qua `/` |
+| Workflow skill đã đóng gói | `.github/skills/*/SKILL.md` | Tác vụ lặp lại, có quy trình rõ |
+| Runtime policy hooks | `.github/hooks/*.json` + scripts | Chặn hành vi rủi ro ở cấp tool |
+| MCP server definitions | `.vscode/mcp.json` | Kết nối công cụ/nguồn dữ liệu bên ngoài |
+| Plugin recommendations | `.vscode/extensions.json` | Đồng bộ môi trường làm việc cho team |
+| Workspace-level chat settings | `.vscode/settings.json` | Bật/tắt tính năng chat theo dự án |
 
-**Luu y quan trong**:
-- Khong dat custom agent/prompt/instruction/hook vao `.github-copilot/`.
-- `.github-copilot/` la noi luu workflow docs, KHONG phai runtime config directory cua Copilot Chat.
+**Lưu ý quan trọng**:
+- Không đặt custom agent/prompt/instruction/hook vào `.github-copilot/`.
+- `.github-copilot/` là nơi lưu workflow docs, KHÔNG phải runtime config directory của Copilot Chat.
 
 ---
 
-## Cai dat nhanh
+## Cài đặt nhanh
 
-### 1. Kiem tra cac thu muc can thiet
+### 1. Kiểm tra các thư mục cần thiết
 
-- `.github-copilot/` da co du `agents/commands/templates/workspace`
-- `.github/` da co `copilot-instructions`, `agents`, `instructions`, `prompts`, `skills`, `hooks`
-- `.vscode/` da co `settings.json`, `mcp.json`, `extensions.json`
+- `.github-copilot/` đã có đủ `agents/commands/templates/workspace`
+- `.github/` đã có `copilot-instructions`, `agents`, `instructions`, `prompts`, `skills`, `hooks`
+- `.vscode/` đã có `settings.json`, `mcp.json`, `extensions.json`
 
-### 2. Cai extension khuyen nghi
+### 2. Cài extension khuyến nghị
 
-Mo VS Code -> Extensions -> cai theo `.vscode/extensions.json`:
+Mở VS Code -> Extensions -> cài theo `.vscode/extensions.json`:
 - GitHub Copilot
 - GitHub Copilot Chat
 - GitHub Pull Requests and Issues
 - GitLens
 - PowerShell
 
-### 3. Bat instruction files va prompt files
+### 3. Bật instruction files và prompt files
 
-Dam bao workspace dang dung `.vscode/settings.json` va extension Copilot Chat da active.
+Đảm bảo workspace đang dùng `.vscode/settings.json` và extension Copilot Chat đã active.
 
-### 4. Khoi dong voi orchestrator
+### 4. Khởi động với orchestrator
 
 Trong Chat:
 
 ```text
-@workspace Su dung agent-orchestrator va thuc hien /setup-project
+@workspace Sử dụng agent-orchestrator và thực hiện /setup-project
 ```
 
-Hoac go `/` de chon prompt da dinh nghia (Analyze Requirements, Plan Sprint, Implement Task, ...).
+Hoặc gõ `/` để chọn prompt đã định nghĩa (Analyze Requirements, Plan Sprint, Implement Task, ...).
 
 ---
 
-## Doi ngu Agent
+## Đội ngũ Agent
 
-### Nguon persona
+### Nguồn persona
 
-- Persona goc: `.github-copilot/agents/*.md`
+- Persona gốc: `.github-copilot/agents/*.md`
 - Chat custom agents: `.github/agents/*.agent.md`
 
 ### Mapping role
 
-| Role | Custom agent | Persona goc |
+| Role | Custom agent | Persona gốc |
 |------|--------------|-------------|
 | BA | `agent-ba` | `.github-copilot/agents/ba.md` |
 | PM | `agent-pm` | `.github-copilot/agents/pm.md` |
@@ -140,14 +140,14 @@ Hoac go `/` de chon prompt da dinh nghia (Analyze Requirements, Plan Sprint, Imp
 
 ---
 
-## Quy trinh chuan
+## Quy trình chuẩn
 
 ```text
 1) Setup va discovery
    /setup-project -> /detect-stack -> /discover-codebase -> /update-agents
 
 2) Requirements
-   Tao BRIEF -> /analyze-requirements -> PO doi ten DRAFT-REQ -> REQ
+   Tạo BRIEF -> /analyze-requirements -> PO đổi tên DRAFT-REQ -> REQ
 
 3) Planning
    /plan-sprint -> commit planning artifacts vao develop
@@ -157,22 +157,22 @@ Hoac go `/` de chon prompt da dinh nghia (Analyze Requirements, Plan Sprint, Imp
    -> /create-pr -> /techlead-review -> /merge-pr
 
 5) Release
-   /smoke-test -> PO sign-off -> /release (xac nhan YES)
+   /smoke-test -> PO sign-off -> /release (xác nhận YES)
 ```
 
-### Rule branch bat buoc
+### Rule branch bắt buộc
 
-- Khong push truc tiep len `main`/`develop`
-- Feature tren `feature/TASK-xxxxx-*`
-- Bug fix tren `fix/BUG-xxxxx-*`
+- Không push trực tiếp lên `main`/`develop`
+- Feature trên `feature/TASK-xxxxx-*`
+- Bug fix trên `fix/BUG-xxxxx-*`
 
 ---
 
-## Prompt va Skill
+## Prompt và Skill
 
 ### Prompt files (`.github/prompts/*.prompt.md`)
 
-Duoc goi nhanh qua `/` trong Chat:
+Được gọi nhanh qua `/` trong Chat:
 - Analyze Requirements
 - Plan Sprint
 - Implement Task
@@ -182,26 +182,26 @@ Duoc goi nhanh qua `/` trong Chat:
 
 ### Skills (`.github/skills/*/SKILL.md`)
 
-- `agentic-sprint`: dieu phoi sprint end-to-end
+- `agentic-sprint`: điều phối sprint end-to-end
 - `agentic-brownfield`: brownfield discovery + drift detection
 
-Khi task lap lai, uu tien skill thay vi viet prompt tu do moi lan.
+Khi task lặp lại, ưu tiên skill thay vì viết prompt tự do mỗi lần.
 
 ---
 
-## Hooks va Runtime Guardrails
+## Hooks và Runtime Guardrails
 
 ### Hook files
 
 - Config: `.github/hooks/policy.json`
 - Scripts: `.github/hooks/scripts/*.ps1`
 
-### Muc tieu
+### Mục tiêu
 
 - Inject system message ngay SessionStart
-- Chan command rui ro cao truoc khi tool chay (PreToolUse)
+- Chặn command rủi ro cao trước khi tool chạy (PreToolUse)
 
-### Cac command dang bi chan (mac dinh)
+### Các command đang bị chặn (mặc định)
 
 - `git reset --hard`
 - `git checkout --`
@@ -209,37 +209,37 @@ Khi task lap lai, uu tien skill thay vi viet prompt tu do moi lan.
 - `git push origin main`
 - `git push origin develop`
 
-Ban co the tuy chinh them pattern theo quy dinh team.
+Bạn có thể tùy chỉnh thêm pattern theo quy định team.
 
 ---
 
-## MCP Servers va Plugins
+## MCP Servers và Plugins
 
 ### MCP config
 
-File `.vscode/mcp.json` dang co sample servers:
+File `.vscode/mcp.json` đang có sample servers:
 - `filesystem`
 - `github`
 - `sequential-thinking`
 
-**Luu y**:
-- Server `github` can token (`GITHUB_PERSONAL_ACCESS_TOKEN`)
-- Neu chua can dung MCP nao, co the xoa/tat server do trong `mcp.json`
+**Lưu ý**:
+- Server `github` cần token (`GITHUB_PERSONAL_ACCESS_TOKEN`)
+- Nếu chưa cần dùng MCP nào, có thể xóa/tắt server đó trong `mcp.json`
 
 ### Plugin recommendations
 
-File `.vscode/extensions.json` giup team cai cung bo extension de tranh lech moi truong.
+File `.vscode/extensions.json` giúp team cài cùng bộ extension để tránh lệch môi trường.
 
 ---
 
 ## Human Checkpoints
 
-7 diem khong duoc bo qua:
+7 điểm không được bỏ qua:
 
 1. Stack review sau `/detect-stack`
 2. Spec approval (DRAFT-REQ -> REQ)
-3. Untracked files truoc planning commit
-4. ADR review truoc architectural change
+3. Untracked files trước planning commit
+4. ADR review trước architectural change
 5. Bug P1 triage
 6. Smoke test sign-off
 7. Release confirmation (`YES`)
@@ -248,47 +248,47 @@ File `.vscode/extensions.json` giup team cai cung bo extension de tranh lech moi
 
 ## Troubleshooting
 
-### Khong thay custom agents trong chat
+### Không thấy custom agents trong chat
 
-- Kiem tra file `.github/agents/*.agent.md` co frontmatter hop le
-- Kiem tra extension GitHub Copilot Chat da bat
+- Kiểm tra file `.github/agents/*.agent.md` có frontmatter hợp lệ
+- Kiểm tra extension GitHub Copilot Chat đã bật
 - Reload window trong VS Code
 
-### Prompt/Skill khong hien khi go `/`
+### Prompt/Skill không hiện khi gõ `/`
 
-- Kiem tra ten file dung duoi `.prompt.md` hoac `SKILL.md`
-- Kiem tra `description` co du ro rang trigger phrase
-- Kiem tra `name` trong SKILL trung voi ten folder
+- Kiểm tra tên file đúng đuôi `.prompt.md` hoặc `SKILL.md`
+- Kiểm tra `description` có đủ rõ ràng trigger phrase
+- Kiểm tra `name` trong SKILL trùng với tên folder
 
-### Instruction khong duoc ap dung
+### Instruction không được áp dụng
 
-- Kiem tra `applyTo` pattern co match file dang sua
-- Kiem tra setting instruction files da bat trong `.vscode/settings.json`
+- Kiểm tra `applyTo` pattern có match file đang sửa
+- Kiểm tra setting instruction files đã bật trong `.vscode/settings.json`
 
-### Hook khong chay
+### Hook không chạy
 
-- Kiem tra JSON syntax trong `.github/hooks/policy.json`
-- Kiem tra script path ton tai va co the thuc thi bang `pwsh`
+- Kiểm tra JSON syntax trong `.github/hooks/policy.json`
+- Kiểm tra script path tồn tại và có thể thực thi bằng `pwsh`
 
-### MCP server khong ket noi
+### MCP server không kết nối
 
-- Kiem tra da cai runtime can thiet (`node`, `npx`)
-- Kiem tra env vars va token
-- Thu chay command server thu cong trong terminal de debug
+- Kiểm tra đã cài runtime cần thiết (`node`, `npx`)
+- Kiểm tra env vars và token
+- Thử chạy command server thủ công trong terminal để debug
 
 ---
 
 ## Best Practices
 
-1. Dung `.github-copilot` cho tri thuc workflow, dung `.github` cho chat runtime customization.
-2. Moi role co custom agent rieng, tranh mot agent lam tat ca.
-3. Prompt cho tac vu don, Skill cho workflow lap lai.
-4. Hooks de enforce policy bat buoc; instructions chi de huong dan.
-5. Luon cap nhat `PROJECT-PROFILE.md` sau moi lan thay doi stack/command.
-6. Commit planning artifacts som de tranh mat state giua cac phien chat.
-7. Khong bo qua human checkpoints du deadline gap.
+1. Dùng `.github-copilot` cho tri thức workflow, dùng `.github` cho chat runtime customization.
+2. Mỗi role có custom agent riêng, tránh một agent làm tất cả.
+3. Prompt cho tác vụ đơn, Skill cho workflow lặp lại.
+4. Hooks để enforce policy bắt buộc; instructions chỉ để hướng dẫn.
+5. Luôn cập nhật `PROJECT-PROFILE.md` sau mỗi lần thay đổi stack/command.
+6. Commit planning artifacts sớm để tránh mất state giữa các phiên chat.
+7. Không bỏ qua human checkpoints dù deadline gấp.
 
 ---
 
 *Agentic Software Team v1.1 for GitHub Copilot Chat*  
-*Ky luat workflow o `.github-copilot`, runtime customizations o `.github` va `.vscode`.*
+*Kỷ luật workflow ở `.github-copilot`, runtime customizations ở `.github` và `.vscode`.*

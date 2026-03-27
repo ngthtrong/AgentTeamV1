@@ -7,15 +7,15 @@ user-invocable: true
 # Agentic Brownfield Skill
 
 ## When to Use
-- Moi tiep quan mot codebase co san.
-- Can cap nhat phan tich va drift report sau nhieu thay doi.
+- Mới tiếp quản một codebase có sẵn.
+- Cần cập nhật phân tích và drift report sau nhiều thay đổi.
 
 ## Procedure
-1. Chay discover-codebase theo thu tu 10 giai doan.
-2. Tao/cap nhat tai lieu trong `.github-copilot/workspace/analysis/`.
-3. Danh dau fragile zones voi risk level.
-4. Doi chieu tai lieu hien tai va code de tao drift report.
-5. De xuat uu tien khac phuc theo risk.
+1. Chạy discover-codebase theo thứ tự 10 giai đoạn.
+2. Tạo/cập nhật tài liệu trong `.github-copilot/workspace/analysis/`.
+3. Đánh dấu fragile zones với risk level.
+4. Đối chiếu tài liệu hiện tại và code để tạo drift report.
+5. Đề xuất ưu tiên khắc phục theo risk.
 
 ## Required References
 - `.github-copilot/commands/discover-codebase.md`
