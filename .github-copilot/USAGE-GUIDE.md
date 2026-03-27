@@ -187,6 +187,26 @@ Hoặc gõ `/` để chọn prompt đã định nghĩa (Analyze Requirements, Pl
 
 Khi task lặp lại, ưu tiên skill thay vì viết prompt tự do mỗi lần.
 
+### Tạo Skill mới
+
+```
+/create-skill my-custom-workflow --description "Mô tả workflow"
+```
+
+Lệnh này tạo skill mới trong `.github-copilot/skills/` với template chuẩn.
+
+### Cấu trúc thư mục Skills
+
+```
+.github-copilot/skills/
+├── agentic-sprint/
+│   └── SKILL.md
+├── agentic-brownfield/
+│   └── SKILL.md
+└── [custom-skill]/
+    └── SKILL.md
+```
+
 ---
 
 ## Hooks và Runtime Guardrails

@@ -42,6 +42,7 @@ Tạo các thư mục và placeholder files:
 .claude/workspace/sprints/.gitkeep
 .claude/workspace/bugs/.gitkeep
 .claude/workspace/analysis/.gitkeep
+.claude/skills/.gitkeep
 ```
 
 ### Bước 4: Tạo PROJECT-PROFILE.md Sơ khai

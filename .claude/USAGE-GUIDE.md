@@ -71,7 +71,13 @@ Copy file `.claude/templates/BRIEF-template.md` sang `.claude/workspace/requirem
 │   ├── scan-untracked.md        → /scan-untracked
 │   ├── update-agents.md         → /update-agents
 │   ├── doc-sync.md              → /doc-sync
-│   └── dashboard.md             → /dashboard
+│   ├── dashboard.md             → /dashboard
+│   └── create-skill.md          → /create-skill
+├── skills/                      ← Workflow tái sử dụng
+│   ├── agentic-sprint/
+│   │   └── SKILL.md             ← Sprint end-to-end workflow
+│   └── agentic-brownfield/
+│       └── SKILL.md             ← Brownfield discovery workflow
 ├── templates/                   ← File mẫu
 │   ├── BRIEF-template.md
 │   ├── TASK-template.yaml
@@ -189,6 +195,61 @@ feature/TASK-00002   fix/BUG-00001        (chỉ từ develop, chỉ về develo
 | `/scan-untracked` | Kiểm tra untracked files trước khi commit |
 | `/check-coverage` | Xem coverage breakdown chi tiết |
 | `/doc-sync` | Đồng bộ tài liệu thủ công |
+| `/create-skill` | Tạo skill mới để đóng gói workflow |
+
+---
+
+## 🧩 Skills: Workflow Tái sử dụng
+
+Skills là các đơn vị workflow đóng gói, cho phép tái sử dụng các chuỗi hành động phức tạp.
+
+### Cấu trúc thư mục Skills
+
+```
+.claude/skills/
+├── agentic-sprint/
+│   └── SKILL.md
+├── agentic-brownfield/
+│   └── SKILL.md
+└── [custom-skill]/
+    └── SKILL.md
+```
+
+### Skills có sẵn
+
+| Skill | Mô tả |
+|-------|-------|
+| `agentic-sprint` | Chạy toàn bộ sprint từ requirements → release với các checkpoint |
+| `agentic-brownfield` | Phân tích brownfield 10 giai đoạn và drift detection |
+
+### Tạo Skill mới
+
+```
+/create-skill my-custom-workflow --description "Mô tả workflow"
+```
+
+### Format SKILL.md
+
+```yaml
+---
+name: skill-name
+description: 'Mô tả ngắn gọn'
+argument-hint: 'Gợi ý tham số'
+user-invocable: true
+---
+# Tên Skill
+
+## When to Use
+- Use case 1
+- Use case 2
+
+## Procedure
+1. Bước 1
+2. Bước 2
+
+## Required References
+- `.claude/commands/relevant.md`
+```
 
 ---
 

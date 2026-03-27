@@ -42,6 +42,7 @@ Tạo các thư mục và placeholder files:
 .github-copilot/workspace/sprints/.gitkeep
 .github-copilot/workspace/bugs/.gitkeep
 .github-copilot/workspace/analysis/.gitkeep
+.github-copilot/skills/.gitkeep
 ```
 
 ### Bước 4: Tạo PROJECT-PROFILE.md Sơ khai

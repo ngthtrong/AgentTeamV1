@@ -47,6 +47,11 @@ Kiến trúc đã được tách lớp:
 ├── PROJECT-PROFILE.md       ← Stack, commands, smoke test scenarios
 ├── agents/                  ← Persona definitions cho từng agent
 ├── commands/                ← Slash command definitions
+├── skills/                  ← Workflow tái sử dụng
+│   ├── agentic-sprint/
+│   │   └── SKILL.md
+│   └── agentic-brownfield/
+│       └── SKILL.md
 ├── templates/               ← File mẫu (brief, task, ADR, bug, smoke report)
 └── workspace/
     ├── requirements/
@@ -57,6 +62,15 @@ Kiến trúc đã được tách lớp:
     ├── analysis/            ← Brownfield analysis docs
     └── reviews/             ← PR review reports
 ```
+
+## Skills: Workflow Tái sử dụng
+
+| Skill | Mô tả |
+|-------|-------|
+| `agentic-sprint` | Sprint end-to-end từ requirements → release |
+| `agentic-brownfield` | Brownfield discovery 10 giai đoạn |
+
+Tạo skill mới: `/create-skill my-custom-workflow`
 
 ## Cấu trúc Runtime Customizations
 
